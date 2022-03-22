@@ -35,10 +35,12 @@ void listDirectory(string pathName) {
 for (const directory_entry &file : directory_iterator(pathName)) {
         path filePath = file.path();
         if (file.is_directory()) {
-            cout << yellow << filePath.filename().u8string() << " ";
+            cout << yellow << filePath.filename().u8string() << endl;
         } else {
-            cout << red << "(" << filePath.filename().u8string() << " - " << fileSizeToString(file.file_size()) << ") ";
+            cout << red << filePath.filename().u8string() << " (" << fileSizeToString(file.file_size()) << ")" << endl;
         }
+
+        cout << reset;
     }
 }
 
@@ -55,8 +57,6 @@ int main(int argc, char* argv[]) {
     }
 
     if (filePathValid(pathName)) listDirectory(pathName);
-    else cout << red << "The provided path is not valid." << endl;
-
-    cout << reset;
+    else cout << red << "The provided path is not valid." << reset << endl;
     return 0;
 }
