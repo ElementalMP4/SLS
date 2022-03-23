@@ -19,5 +19,5 @@ Folders follow this format: `folder name`
 
 SLS requires C++ 17. If using G++ be sure to use the `-std=c++17` flag.
 
-Example Windows build command: `g++ SLS.cpp -o sls.exe -std=c++17`
-Example Linux build command: `g++ SLS.cpp -o sls -std=c++17`
+Example Windows build command: `g++ .\SLS.cpp -o sls.exe -std=c++17 -s -Os`
+Example Linux build command: `g++ .\SLS.cpp -o sls -std=c++17 -s -Os`
