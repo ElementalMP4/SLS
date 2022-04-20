@@ -15,13 +15,20 @@ const MEGABYTE: u64 = 1_000_0000_0000;
 const GIGABYTE: u64 = 1_000_0000_0000_0000;
 const TERABYTE: u64 = 1_000_0000_0000_0000_0000;
 
-fn print_dir_name(path: &PathBuf) {
-    let path_name = match path.file_name() {
+fn get_path_name(path: &PathBuf) -> OsString {
+    match path.file_name() {
         Some(name) => name.to_os_string(),
         None => OsString::from(".."),
-    };
+    }
+}
 
-    println!("{}{}{}", YELLOW, path_name.to_string_lossy(), RESET);
+fn print_dir_name(path: &PathBuf) {
+    println!(
+        "{}{}{}",
+        YELLOW,
+        get_path_name(path).to_string_lossy(),
+        RESET
+    );
 }
 
 fn get_file_size(path: &PathBuf) -> Result<String, std::io::Error> {
@@ -38,16 +45,11 @@ fn get_file_size(path: &PathBuf) -> Result<String, std::io::Error> {
 }
 
 fn print_file_name(path: &PathBuf) -> Result<(), std::io::Error> {
-    let path_name = match path.file_name() {
-        Some(name) => name.to_os_string(),
-        None => OsString::from(".."),
-    };
-
     let file_size = get_file_size(path)?;
     println!(
         "{}{} ({}){}",
         RED,
-        path_name.to_string_lossy(),
+        get_path_name(path).to_string_lossy(),
         file_size,
         RESET
     );
@@ -56,9 +58,9 @@ fn print_file_name(path: &PathBuf) -> Result<(), std::io::Error> {
 }
 
 fn list_dir(path: &Path) -> Result<(), std::io::Error> {
-    for entry in path.read_dir().unwrap() {
-        let entry = entry.unwrap();
-        if entry.metadata().unwrap().is_dir() {
+    for entry in path.read_dir()? {
+        let entry = entry?;
+        if entry.metadata()?.is_dir() {
             print_dir_name(&entry.path());
         } else {
             print_file_name(&entry.path())?;
