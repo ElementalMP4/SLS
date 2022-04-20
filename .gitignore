@@ -1,2 +1,6 @@
 /.vscode/
 sls.exe
+
+# Added by cargo
+
+/target
