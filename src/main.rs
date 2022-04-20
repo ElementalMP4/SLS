@@ -9,11 +9,11 @@ const RED: &str = "\x1b[31m"; //Red foreground
 const YELLOW: &str = "\x1b[33m"; //Yellow foreground
 const RESET: &str = "\x1b[0m"; //Set back to default
 
-const BYTE: u64 = 1_000;
-const KILOBYTE: u64 = 1_000_0000;
-const MEGABYTE: u64 = 1_000_0000_0000;
-const GIGABYTE: u64 = 1_000_0000_0000_0000;
-const TERABYTE: u64 = 1_000_0000_0000_0000_0000;
+const KILOBYTE: u64 = 1_000;
+const MEGABYTE: u64 = 1_000_0000;
+const GIGABYTE: u64 = 1_000_0000_0000;
+const TERABYTE: u64 = 1_000_0000_0000_0000;
+const PETABYTE: u64 = 1_000_0000_0000_0000_0000;
 
 fn get_path_name(path: &PathBuf) -> OsString {
     match path.file_name() {
@@ -34,12 +34,12 @@ fn print_dir_name(path: &PathBuf) {
 fn get_file_size(path: &PathBuf) -> Result<String, std::io::Error> {
     let metadata = path.metadata()?;
     match metadata.len() {
-        len if len < BYTE => Ok(format!("{}B", len)),
-        len if len < KILOBYTE => Ok(format!("{:.2}KB", len as f32 / BYTE as f32)),
-        len if len < MEGABYTE => Ok(format!("{:.2}MB", len as f32 / KILOBYTE as f32)),
-        len if len < GIGABYTE => Ok(format!("{:.2}GB", len as f32 / MEGABYTE as f32)),
+        len if len < KILOBYTE => Ok(format!("{}B", len)),
+        len if len < MEGABYTE => Ok(format!("{:.2}KB", len as f32 / KILOBYTE as f32)),
+        len if len < GIGABYTE => Ok(format!("{:.2}MB", len as f32 / MEGABYTE as f32)),
+        len if len < TERABYTE => Ok(format!("{:.2}GB", len as f32 / GIGABYTE as f32)),
         // added terabyte support
-        len if len < TERABYTE => Ok(format!("{:.2}TB", len as f32 / GIGABYTE as f32)),
+        len if len < PETABYTE => Ok(format!("{:.2}TB", len as f32 / TERABYTE as f32)),
         _ => Ok(String::from("Thats a really big file 😳")),
     }
 }
